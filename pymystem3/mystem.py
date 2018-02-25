@@ -163,11 +163,12 @@ class Mystem(object):
     .. note:: Default value of :py:attr:`mystem_bin` can be overwritted by :envvar:`MYSTEM_BIN`.
     """
 
-    def __init__(self, mystem_bin=None, grammar_info=True, disambiguation=True, entire_input=True):
+    def __init__(self, mystem_bin=None, grammar_info=True, disambiguation=True, entire_input=True, weights=True):
         self._mystem_bin = mystem_bin
         self._grammar_info = grammar_info
         self._disambiguation = disambiguation
         self._entire_input = entire_input
+        self._weights = weights
         self._procin = None
         self._procout = None
         self._procout_no = None
@@ -190,6 +191,9 @@ class Mystem(object):
 
         if self._entire_input is True:
             self._mystemargs.append('-c')
+
+        if self._weights is True:
+            self._mystemargs.append('--weight')
 
     def __del__(self):
         self.close()  # terminate process on exit
