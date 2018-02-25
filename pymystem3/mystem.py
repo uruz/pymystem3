@@ -3,9 +3,9 @@
 A Python wrapper of the Yandex Mystem 3.0 morphological analyzer.
 """
 
-from __future__ import print_function
 
-from itertools import ifilter, imap
+
+
 import os
 import platform
 import select
@@ -13,7 +13,7 @@ import subprocess
 import sys
 
 if sys.version_info[0] < 3:
-    from cStringIO import StringIO
+    from io import StringIO
 else:
     from io import BytesIO as StringIO
 
@@ -40,7 +40,7 @@ _TARBALL_URLS = {
     }
 }
 
-_NL = unicode('\n').encode('utf-8')
+_NL = str('\n').encode('utf-8')
 _POSIX = os.name == 'posix'
 
 
@@ -107,7 +107,7 @@ def install(out=sys.stderr):
 
 
 def _get_on_prefix(kvs, key):
-    for k, v in kvs.iteritems():
+    for k, v in kvs.items():
         if key.startswith(k):
             return v
     return None
@@ -120,7 +120,7 @@ def _get_tarball_url():
     if url is None:
         raise NotImplementedError("Your system is not supported. Feel free to report bug or make a pull request.")
 
-    if isinstance(url, basestring):
+    if isinstance(url, str):
         return url
 
     url = url.get(bits, None)
@@ -262,7 +262,7 @@ class Mystem(object):
         need_encode = (sys.version_info[0] < 3 and isinstance(text, str))
 
         infos = self.analyze(text)
-        lemmas = list(ifilter(None, imap(self._get_lemma, infos)))
+        lemmas = list(filter(None, map(self._get_lemma, infos)))
 
         if need_encode is True:
             lemmas = [l.encode('utf-8') for l in lemmas]
@@ -271,7 +271,7 @@ class Mystem(object):
 
     if _PIPELINE_MODE:
         def _analyze_impl(self, text):
-            if isinstance(text, unicode):
+            if isinstance(text, str):
                 text = text.encode('utf-8')
 
             if self._proc is None:
@@ -300,7 +300,7 @@ class Mystem(object):
             return obj
     else:
         def _analyze_impl(self, text):
-            if isinstance(text, unicode):
+            if isinstance(text, str):
                 text = text.encode('utf-8')
 
             if self._proc is None:
